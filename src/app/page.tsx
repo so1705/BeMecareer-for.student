@@ -27,6 +27,19 @@ import { members } from "@/data/members";
 import { site } from "@/data/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const heroAmbientImages = [
+  "/images/hero-community-light.jpg",
+  "/images/student-discussion.jpg",
+  "/images/campus-media-cinematic.jpg",
+  "/images/event-workshop-cinematic.jpg",
+  "/images/internship-studio-cinematic.jpg",
+  "/images/ambient-campus.jpg",
+  "/images/hero-community.png",
+  "/images/student-discussion-source.png",
+  "/images/linework-bg.jpg",
+  "/images/ambient-campus-source.png"
+];
+
 
 const narrativeFrames = [
   {
@@ -287,11 +300,12 @@ export default function Home() {
             <Image src="/images/campus-media-cinematic.jpg" alt="" fill priority unoptimized sizes="100vw" className="object-cover" />
           </div>
         </div>
-        <div className="hero-motion-strip absolute inset-x-0 top-[18%]" aria-hidden>
-          <span>BeMeキャリア</span>
-          <span>学生主体</span>
-          <span>キャリア支援</span>
-          <span>大学別SNS</span>
+        <div className="hero-image-orbit absolute inset-0" aria-hidden>
+          {heroAmbientImages.map((src, index) => (
+            <div key={src + index} className={"hero-orbit-photo hero-orbit-photo-" + (index + 1)}>
+              <Image src={src} alt="" fill priority={index < 3} unoptimized sizes="(max-width: 640px) 44vw, 18vw" className="object-cover" />
+            </div>
+          ))}
         </div>
         <div className="hero-light-rails absolute inset-0" aria-hidden />
         <div className="ambient-film absolute inset-0" />
