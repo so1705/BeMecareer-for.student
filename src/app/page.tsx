@@ -193,8 +193,20 @@ function LoadingScreen() {
 
 export default function Home() {
   const [activeActivity, setActiveActivity] = useState(0);
+  const [navCondensed, setNavCondensed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const active = activities[activeActivity];
   const ActiveIcon = active.icon;
+
+  useEffect(() => {
+    const onScroll = () => {
+      setNavCondensed(window.scrollY > 150);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <main className="site-shell overflow-hidden bg-paper text-ink">
@@ -205,9 +217,15 @@ export default function Home() {
         <span />
         <span />
       </div>
-      <header className="beme-header" aria-label="サイトヘッダー">
+      <header className={"beme-header " + (navCondensed ? "is-condensed" : "") + " " + (menuOpen ? "is-menu-open" : "")} aria-label="サイトヘッダー">
         <nav className="beme-nav" aria-label="主要ナビゲーション">
-          <a href="#top" className="beme-nav-brand beme-nav-wordmark" aria-label="BeMeキャリア トップへ">
+          <a
+            href="#top"
+            className="beme-nav-brand beme-nav-wordmark"
+            aria-label="BeMeキャリア トップへ"
+            onClick={() => setMenuOpen(false)}
+          >
+            <span className="beme-brand-kicker">学生キャリア支援</span>
             <span className="beme-nav-copy">
               <strong>BeMeキャリア</strong>
               <small>学生の未来に、本気で向き合う。</small>
@@ -222,10 +240,60 @@ export default function Home() {
               </a>
             ))}
           </div>
+
+          <button
+            type="button"
+            className="beme-nav-toggle"
+            aria-label={menuOpen ? "メニューを閉じる" : "メニューを開く"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </nav>
+
+        {menuOpen ? (
+          <motion.div
+            className="beme-menu-panel"
+            initial={{ opacity: 0, y: -18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.34, ease }}
+          >
+            <div className="beme-menu-panel-head">
+              <span>ページ移動</span>
+              <strong>BeMeキャリア</strong>
+            </div>
+            {site.nav.map((item, index) => (
+              <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+                <small>0{index + 1}</small>
+                <span>{item.label}</span>
+              </a>
+            ))}
+          </motion.div>
+        ) : null}
       </header>
 
       <section id="top" className="hero-stage relative min-h-[100svh] px-5 pb-16 pt-28 md:px-8 md:pt-32">
+        <div className="hero-cinematic-backdrop absolute inset-0" aria-hidden>
+          <div className="hero-bg-photo hero-bg-photo-a">
+            <Image src="/images/hero-community-light.jpg" alt="" fill priority unoptimized sizes="100vw" className="object-cover" />
+          </div>
+          <div className="hero-bg-photo hero-bg-photo-b">
+            <Image src="/images/student-discussion.jpg" alt="" fill priority unoptimized sizes="100vw" className="object-cover" />
+          </div>
+          <div className="hero-bg-photo hero-bg-photo-c">
+            <Image src="/images/campus-media-cinematic.jpg" alt="" fill priority unoptimized sizes="100vw" className="object-cover" />
+          </div>
+        </div>
+        <div className="hero-motion-strip absolute inset-x-0 top-[18%]" aria-hidden>
+          <span>BeMeキャリア</span>
+          <span>学生主体</span>
+          <span>キャリア支援</span>
+          <span>大学別SNS</span>
+        </div>
+        <div className="hero-light-rails absolute inset-0" aria-hidden />
         <div className="ambient-film absolute inset-0" />
         <div className="hero-gradient absolute inset-0" />
         <div className="hero-linework absolute inset-0" />
