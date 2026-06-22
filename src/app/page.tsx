@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import { CalendarCheck, CircleDot, GraduationCap, Instagram, Menu, MessageCircle, UsersRound, X } from "lucide-react";
 import { members } from "@/data/members";
+import { services } from "@/data/services";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -13,33 +15,6 @@ const navItems = [
   { label: "事業", href: "#services" },
   { label: "歩み", href: "#story" },
   { label: "運営", href: "#team" }
-];
-
-const serviceCards = [
-  {
-    number: "01",
-    label: "大学別SNS",
-    title: "その大学の学生に、近い言葉で届く情報を。",
-    body: "各大学の先輩・OB・現役学生が発信に関わり、就活情報を一括で流すのではなく、大学ごとの生活圏に近い言葉で届けます。",
-    image: "/images/campus-media-cinematic.jpg",
-    points: ["大学ごとの文脈", "先輩のリアル", "次の行動へ接続"]
-  },
-  {
-    number: "02",
-    label: "イベント",
-    title: "合同説明会ではなく、学生のための場をつくる。",
-    body: "企業説明を聞くだけで終わらせず、学生が自分の未来に前向きになれる対話と導線を設計します。",
-    image: "/images/event-workshop-cinematic.jpg",
-    points: ["参加しやすい導線", "近い距離の対話", "熱量を次へつなぐ"]
-  },
-  {
-    number: "03",
-    label: "長期インターン",
-    title: "学生企業の一員として、本気の実績をつくる。",
-    body: "学歴や経験に不安がある学生でも、事業の当事者として関われる環境をつくり、挑戦を次の自信へ変えていきます。",
-    image: "/images/internship-studio-cinematic.jpg",
-    points: ["学生だけで運営", "実践経験", "成長できる環境"]
-  }
 ];
 
 const storyCards = [
@@ -66,6 +41,69 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
     >
       {children}
     </motion.div>
+  );
+}
+
+function MotionChapter({
+  service,
+  index,
+  total,
+  progress
+}: {
+  service: (typeof services)[number];
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}) {
+  const segment = 1 / total;
+  const start = Math.max(0, index * segment - 0.08);
+  const enter = index * segment + 0.02;
+  const hold = index * segment + segment * 0.64;
+  const end = Math.min(1, (index + 1) * segment + 0.08);
+  const opacity = useTransform(progress, [start, enter, hold, end], [0, 1, 1, index === total - 1 ? 1 : 0]);
+  const rotateX = useTransform(progress, [start, enter, hold, end], [18, 0, 0, -14]);
+  const rotateY = useTransform(progress, [start, enter, hold, end], [-18, 0, 0, 16]);
+  const y = useTransform(progress, [start, enter, hold, end], [110, 0, 0, -90]);
+  const scale = useTransform(progress, [start, enter, hold, end], [0.82, 1, 1, 0.9]);
+
+  return (
+    <motion.article className="v2-cinema-card" style={{ opacity, rotateX, rotateY, y, scale }}>
+      <div className="v2-cinema-image">
+        <Image src={service.image} alt="" fill unoptimized sizes="(min-width: 900px) 46vw, 92vw" className="object-cover" />
+      </div>
+      <div className="v2-cinema-copy">
+        <small>{service.number} / {service.label}</small>
+        <h3>{service.lead}</h3>
+        <p>{service.body}</p>
+        <Link href={`/services/${service.slug}`}>詳しく見る</Link>
+      </div>
+    </motion.article>
+  );
+}
+
+function ScrollCinema() {
+  const ref = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const railY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+  const lineScale = useTransform(scrollYProgress, [0, 1], [0.08, 1]);
+
+  return (
+    <section ref={ref} className="v2-cinema" aria-label="事業の流れ">
+      <div className="v2-cinema-sticky">
+        <motion.div className="v2-cinema-kicker" style={{ y: railY }}>
+          <span>動きの流れ</span>
+          <strong>知る、出会う、挑戦する。</strong>
+        </motion.div>
+        <div className="v2-cinema-stage">
+          {services.map((service, index) => (
+            <MotionChapter key={service.slug} service={service} index={index} total={services.length} progress={scrollYProgress} />
+          ))}
+        </div>
+        <div className="v2-cinema-progress" aria-hidden>
+          <motion.i style={{ scaleX: lineScale }} />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -147,6 +185,8 @@ export default function Home() {
         </div>
       </section>
 
+      <ScrollCinema />
+
       <section id="services" className="v2-services">
         <Reveal className="v2-section-head">
           <span>事業内容</span>
@@ -155,21 +195,24 @@ export default function Home() {
         </Reveal>
 
         <div className="v2-service-list">
-          {serviceCards.map((service, index) => (
+          {services.map((service, index) => (
             <Reveal key={service.label} className="v2-service-card" delay={index * 0.08}>
-              <div className="v2-service-image">
-                <Image src={service.image} alt="" fill unoptimized sizes="(min-width: 900px) 32vw, 92vw" className="object-cover" />
-              </div>
-              <div className="v2-service-copy">
-                <small>{service.number} / {service.label}</small>
-                <h3>{service.title}</h3>
-                <p>{service.body}</p>
-                <ul>
-                  {service.points.map((point) => (
-                    <li key={point}><CircleDot size={12} aria-hidden />{point}</li>
-                  ))}
-                </ul>
-              </div>
+              <Link href={`/services/${service.slug}`} className="v2-service-link">
+                <div className="v2-service-image">
+                  <Image src={service.image} alt="" fill unoptimized sizes="(min-width: 900px) 32vw, 92vw" className="object-cover" />
+                </div>
+                <div className="v2-service-copy">
+                  <small>{service.number} / {service.label}</small>
+                  <h3>{service.title}</h3>
+                  <p>{service.body}</p>
+                  <ul>
+                    {service.points.map((point) => (
+                      <li key={point}><CircleDot size={12} aria-hidden />{point}</li>
+                    ))}
+                  </ul>
+                  <span className="v2-service-more">詳細ページへ</span>
+                </div>
+              </Link>
             </Reveal>
           ))}
         </div>
