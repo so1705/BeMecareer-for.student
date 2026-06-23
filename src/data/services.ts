@@ -13,6 +13,8 @@ export type ServiceDetail = {
   metrics: { value: string; label: string; note: string }[];
   graph: { label: string; value: number }[];
   scenes: { title: string; body: string }[];
+  transparency: { label: string; title: string; body: string }[];
+  proof: { label: string; value: string; body: string }[];
 };
 
 export const services: ServiceDetail[] = [
@@ -24,7 +26,7 @@ export const services: ServiceDetail[] = [
     body: "各大学の先輩や現役学生が発信に関わります。就活情報を一括で流すのではなく、その大学の学生が読みやすい形に整えます。",
     image: "/images/campus-media-cinematic.jpg",
     points: ["大学ごとの文脈", "先輩の実感", "次の行動へ接続"],
-    lead: "同じ就活情報でも、大学が違えば受け取り方は変わります。だから発信の入口から大学ごとに設計します。",
+    lead: "同じ就活情報でも、大学が違えば受け取り方は変わります。だから入口から大学ごとに設計します。",
     detailTitle: "その大学を知る人が、その大学の学生に届く言葉で伝える。",
     detailBody: [
       "BeMeキャリアのSNSは、全国へ同じ情報を流すメディアではありません。大学ごとの先輩、OB、現役学生が発信に関わり、その大学の学生が読みやすい順番と言葉に整えます。",
@@ -37,7 +39,7 @@ export const services: ServiceDetail[] = [
     ],
     metrics: [
       { value: "2万人+", label: "SNS総フォロワー", note: "大学別アカウントを含む接点" },
-      { value: "大学別", label: "発信設計", note: "一括配信ではなく、大学ごとに編集" },
+      { value: "大学別", label: "発信設計", note: "一括配信ではなく大学ごとに編集" },
       { value: "先輩視点", label: "情報の距離", note: "学生が読みやすい言葉に整える" }
     ],
     graph: [
@@ -49,6 +51,16 @@ export const services: ServiceDetail[] = [
     scenes: [
       { title: "投稿前", body: "大学ごとの学生が何に迷っているかを見て、切り口を決める。" },
       { title: "投稿後", body: "反応を見て、イベントやインターンにつながる導線を調整する。" }
+    ],
+    transparency: [
+      { label: "編集", title: "誰に向けた投稿かを先に決める", body: "学年、大学、よくある不安を分けてから投稿をつくります。広く刺さる言葉より、目の前の学生が読める言葉を優先します。" },
+      { label: "検証", title: "反応を見て次の導線を直す", body: "保存、相談、参加の反応を見ながら、投稿だけで終わらない流れへ調整します。" },
+      { label: "接続", title: "イベントや実践機会へつなぐ", body: "知って終わりではなく、話せる場、試せる場まで進めるように導線を置きます。" }
+    ],
+    proof: [
+      { label: "運営", value: "学生編集", body: "大人の言葉をそのまま出さず、学生が読める表現へ整える。" },
+      { label: "距離", value: "大学単位", body: "大学ごとの生活圏と進路感に合わせる。" },
+      { label: "目的", value: "行動接続", body: "投稿を次の相談、参加、挑戦へつなげる。" }
     ]
   },
   {
@@ -66,7 +78,7 @@ export const services: ServiceDetail[] = [
       "参加前の入りやすさ、当日の距離感、参加後の動き方まで設計します。SNSで知った情報を、対話を通して自分の判断材料に変える。その流れをつくります。"
     ],
     flow: [
-      { title: "入り口を軽くする", body: "告知、申込、当日の雰囲気を見せ、初参加でも入りやすくします。" },
+      { title: "入口を軽くする", body: "告知、申込、当日の雰囲気を見せ、初参加でも入りやすくします。" },
       { title: "話せる距離をつくる", body: "企業や同世代と近く話せるように、説明と対話の比率を調整します。" },
       { title: "参加後につなげる", body: "当日の熱量を、SNS、相談、インターンの次の行動に接続します。" }
     ],
@@ -84,6 +96,16 @@ export const services: ServiceDetail[] = [
     scenes: [
       { title: "参加前", body: "学生が不安を感じにくい案内と、当日の雰囲気が見える導線を用意する。" },
       { title: "参加後", body: "話して終わりにせず、次の相談や挑戦に進める余白を残す。" }
+    ],
+    transparency: [
+      { label: "企画", title: "学生が入りやすい理由をつくる", body: "テーマ、告知、申込の言葉まで、初めての学生が参加しやすい形に整えます。" },
+      { label: "当日", title: "説明と対話の比率を調整する", body: "聞くだけの時間を減らし、学生が質問しやすい距離と余白を設計します。" },
+      { label: "余韻", title: "帰った後の動きまで残す", body: "イベント後に相談、発信、インターンへ進めるよう、次の行動を見える形で渡します。" }
+    ],
+    proof: [
+      { label: "頻度", value: "年3回", body: "企画から運営まで学生主体で開催。" },
+      { label: "形式", value: "対話型", body: "説明会ではなく、学生が話せる場にする。" },
+      { label: "接点", value: "企業連携", body: "学生の挑戦につながる外部機会を増やす。" }
     ]
   },
   {
@@ -119,6 +141,16 @@ export const services: ServiceDetail[] = [
     scenes: [
       { title: "初月", body: "小さな役割から始め、事業の流れと判断基準を覚える。" },
       { title: "三か月後", body: "自分で改善を提案し、結果まで見にいく経験を増やす。" }
+    ],
+    transparency: [
+      { label: "入口", title: "不安を隠さず始められる", body: "経験がない前提で、最初の役割を小さく切ります。いきなり成果を求めるのではなく、動ける状態をつくります。" },
+      { label: "実務", title: "学生だけで事業を動かす", body: "SNS、企画、運営、改善まで、学生の判断が反映される仕事を任せます。" },
+      { label: "実績", title: "取り組みを言葉に残す", body: "やったことを経験で終わらせず、就活や次の挑戦で話せる形に整理します。" }
+    ],
+    proof: [
+      { label: "人数", value: "50名+", body: "同じ不安を持つ学生が、実務へ入っている。" },
+      { label: "体制", value: "学生運営", body: "意思決定も改善も、学生が中心になって進める。" },
+      { label: "経験", value: "実務型", body: "作業ではなく、事業の一部を担う。" }
     ]
   }
 ];
