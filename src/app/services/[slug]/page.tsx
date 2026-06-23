@@ -54,12 +54,48 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         </div>
       </section>
 
+      <section className="service-detail-metrics" aria-label="事業の指標">
+        {service.metrics.map((metric) => (
+          <article key={metric.label}>
+            <strong>{metric.value}</strong>
+            <span>{metric.label}</span>
+            <p>{metric.note}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="service-detail-visual">
+        <div className="service-detail-visual-copy">
+          <span>設計の流れ</span>
+          <h2>学生が迷わず次へ進めるように、接点を細かく分けて設計する。</h2>
+          <p>認知、参加、実践までの間にある小さな迷いを減らすため、発信と体験を分けて見ています。</p>
+        </div>
+        <div className="service-detail-graph" aria-label="導線グラフ">
+          {service.graph.map((item) => (
+            <div key={item.label}>
+              <span>{item.label}</span>
+              <i><b style={{ width: item.value + "%" }} /></i>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="service-detail-flow">
         {service.flow.map((item, index) => (
           <article key={item.title}>
             <small>{String(index + 1).padStart(2, "0")}</small>
             <h2>{item.title}</h2>
             <p>{item.body}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="service-detail-scenes">
+        {service.scenes.map((scene) => (
+          <article key={scene.title}>
+            <span>{scene.title}</span>
+            <p>{scene.body}</p>
           </article>
         ))}
       </section>

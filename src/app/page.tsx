@@ -107,9 +107,35 @@ function ScrollCinema() {
   );
 }
 
+function IntroLoader({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const timer = window.setTimeout(onDone, 1880);
+    return () => window.clearTimeout(timer);
+  }, [onDone]);
+
+  return (
+    <motion.div
+      className="v2-intro-loader"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      transition={{ duration: 0.52, ease, delay: 1.36 }}
+      aria-label="読み込み中"
+    >
+      <motion.div className="v2-intro-paper" initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 0.72, ease }} />
+      <motion.div className="v2-intro-mark" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.72, ease, delay: 0.18 }}>
+        <span>BeMe</span>
+        <i />
+        <small>学生の近くで、未来へ。</small>
+      </motion.div>
+      <motion.div className="v2-intro-ink" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.86, ease, delay: 0.48 }} />
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 140);
@@ -120,6 +146,7 @@ export default function Home() {
 
   return (
     <main className="v2-shell">
+      {!introDone ? <IntroLoader onDone={() => setIntroDone(true)} /> : null}
       <header className={"v2-header " + (scrolled ? "is-scrolled" : "") + " " + (menuOpen ? "is-open" : "")}>
         <a href="#top" className="v2-brand" onClick={() => setMenuOpen(false)}>
           <strong>BeMeキャリア</strong>
